@@ -58,8 +58,28 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
+
+    echo -e "${YELLOW}Reloading systemd...${NC}"
+    if systemctl daemon-reload; then
+        echo -e "${GREEN}Systemd was fully reloaded${NC}"
+    else
+        echo -e "${RED}Error when reloading systemd${NC}" >&2
+        exit 1
+    fi
 else
     echo -e "${GREEN}Monitoring system already exists. It won't be modified.${NC}"
+fi
+
+if systemctl is-active --quiet nginx-monitor; then
+    echo -e "${GREEN}Monitoring system is already active"
+else
+    echo -e "${YELLOW}Enabling monitoring system...${NC}"
+    if systemctl enable --now nginx-monitor.service > /dev/null 2>&1; then
+        echo -e "${GREEN}Monitoring system activated${NC}"
+    else
+        echo -e "${RED}Error when enabling monitoring system${NC}" >&2
+        exit 1
+    fi
 fi
 
 if systemctl is-active --quiet nginx; then
