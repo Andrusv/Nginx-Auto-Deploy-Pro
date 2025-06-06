@@ -58,14 +58,6 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
-
-    echo -e "${YELLOW}Reloading systemd...${NC}"
-    if systemctl daemon-reload; then
-        echo -e "${GREEN}Systemd was fully reloaded${NC}"
-    else
-        echo -e "${RED}Error when reloading systemd${NC}" >&2
-        exit 1
-    fi
 else
     echo -e "${GREEN}Monitoring system already exists. It won't be modified.${NC}"
 fi
