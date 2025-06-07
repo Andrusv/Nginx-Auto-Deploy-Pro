@@ -5,13 +5,14 @@
 ![Nginx Logo](https://nginx.org/nginx.png)
 
 ## 🔍 Overview  
-A **Bash script** designed to automate the installation, configuration, and service management of Nginx on Ubuntu/Debian systems. Ideal for DevOps engineers who need reproducible, error-free server setups.  
+A **Bash script** designed to automate the installation, configuration, and service management of Nginx on Ubuntu/Debian systems. Now with automatic monitoring capabilities. Ideal for DevOps engineers who need reproducible, error-free server setups.  
 
 ### ⚙️ Features  
 - **Silent installation** (non-interactive) of the latest Nginx version.  
 - **Auto-configuration** of:  
   - File permissions (`/var/www/html`).  
   - Systemd service health checks.  
+- **Self-healing monitoring** - Automatically restarts Nginx if it fails.  
 - **Idempotent** — can be safely rerun without side effects.  
 
 ## 🛠️ Technical Deep Dive  
@@ -31,7 +32,14 @@ A **Bash script** designed to automate the installation, configuration, and serv
      systemctl enable --now nginx  
      ```  
 
-4. **Validation**:  
+4. **Monitoring Setup**:  
+   - Creates a systemd service to monitor and automatically restart Nginx.  
+   - Logs all restart events to `/var/log/nginx-monitor.log`.  
+   ```bash
+      sudo systemctl status nginx-monitor  # Check monitoring service
+      sudo tail -f /var/log/nginx-monitor.log  # View monitoring logs
+   ```
+5. **Validation**:  
    - Checks service status (`systemctl is-active nginx`).  
    - Optional: Tests HTTP response with `curl localhost`.  
 
@@ -47,3 +55,4 @@ git clone https://github.com/Andrusv/nginx-auto-deploy-pro.git
 cd nginx-auto-deploy-pro  
 chmod +x deploy_nginx.sh  
 sudo ./deploy_nginx.sh  
+```
